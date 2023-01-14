@@ -1,17 +1,16 @@
 {
   "compilerOptions": {
     "lib": [
-      "ESNext"
+      "esnext"
     ],
-    "module": "esnext",
-    "target": "esnext",
+    "module": "commonjs",
+    "target": "es2020",
     "moduleResolution": "node",
     "strict": true,
     "downlevelIteration": true,
     "skipLibCheck": true,
     "jsx": "preserve",
     "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
     "allowJs": true
   }
 }
