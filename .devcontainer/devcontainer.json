@@ -8,6 +8,11 @@
 		"ghcr.io/devcontainers-contrib/features/prisma:2": {},
 		"ghcr.io/NicoVIII/devcontainer-features/pnpm:2": {}
 	},
+	"extensions": [
+		"dbaeumer.vscode-eslint",
+		"ms-vsliveshare.vsliveshare",
+		"standard.vscode-standard"
+	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],

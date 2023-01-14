@@ -1,5 +1,6 @@
 // A demo of all the reference sheet features
-import { ApplicationCommandType, Events, GatewayIntentBits } from 'discord.js'
+
+import { ActionRowBuilder, ApplicationCommandType, ButtonBuilder, ButtonStyle, Events, GatewayIntentBits, ModalActionRowComponentBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js'
 import host from './host'
 
 const mod = host.module('demo', [
@@ -83,5 +84,63 @@ mod.menu('Give 2021-2022 role', ApplicationCommandType.User, {
       await member?.roles.add('1028749978870493234')
       await intx.reply({ content: 'done!', ephemeral: true })
     }
+  }
+})
+
+// Display embeds and buttons
+mod.slash('demo-count', 'Display the number of messages caught in a fancy format', async intx => {
+  const buttons = new ActionRowBuilder<ButtonBuilder>()
+    .addComponents(
+      new ButtonBuilder()
+        .setCustomId('count-good')
+        .setLabel('Good')
+        .setStyle(ButtonStyle.Success)
+        .setEmoji('👍'),
+      new ButtonBuilder()
+        .setCustomId('count-bad')
+        .setLabel('Bad')
+        .setStyle(ButtonStyle.Danger)
+        .setEmoji('👎'))
+  await intx.reply({
+    embeds: [{
+      title: `The total count: ${totalCount}`,
+      description: 'This is a sample description',
+      fields: [
+        {
+          name: 'Field',
+          value: 'Achieved'
+        }
+      ]
+    }],
+    components: [buttons]
+  })
+})
+
+// Respond to button clicks
+mod.when(Events.InteractionCreate, async intx => {
+  if (intx.isMessageComponent()) {
+    if (intx.customId === 'count-good') {
+      await intx.reply({ content: 'glad you like the count :)', ephemeral: true })
+    } else if (intx.customId === 'count-bad') {
+      // Construct and show modals
+      const modal = new ModalBuilder()
+        .setCustomId('count-bad-form')
+        .setTitle('Count Bad Form')
+        .addComponents(
+          new ActionRowBuilder<ModalActionRowComponentBuilder>()
+            .addComponents(new TextInputBuilder()
+              .setCustomId('count-bad-reason')
+              .setLabel('Why don\'t you like this number?')
+              .setMinLength(10)
+              .setMaxLength(200)
+              .setStyle(TextInputStyle.Paragraph)
+              .setRequired(true)))
+      await intx.showModal(modal)
+    }
+  }
+  // Handle modal submission
+  if (intx.isModalSubmit() && intx.customId === 'count-bad-form') {
+    console.log(intx.fields.getTextInputValue('count-bad-reason'))
+    await intx.reply({ content: 'thanks for your feedback', ephemeral: true })
   }
 })
