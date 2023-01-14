@@ -101,7 +101,8 @@ mod.slash('demo-count', 'Display the number of messages caught in a fancy format
         .setLabel('Bad')
         .setStyle(ButtonStyle.Danger)
         .setEmoji('👎'))
-  await intx.reply({
+  // You can also return the reply
+  return {
     embeds: [{
       title: `The total count: ${totalCount}`,
       description: 'This is a sample description',
@@ -113,7 +114,7 @@ mod.slash('demo-count', 'Display the number of messages caught in a fancy format
       ]
     }],
     components: [buttons]
-  })
+  }
 })
 
 // Respond to button clicks
